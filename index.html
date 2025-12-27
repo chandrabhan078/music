@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mikku's Music World ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --soft-pink: #FFDEE9;
+            --rose-gold: #B76E79;
+            --wine: #4A0E0E;
+            --heart-pink: #ff4f9a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--soft-pink) 0%, #B5FFFC 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* Heart Animation */
+        .heart {
+            position: absolute;
+            color: var(--heart-pink);
+            font-size: 20px;
+            pointer-events: none;
+            animation: floatUp 3s ease-in forwards;
+            z-index: 1;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-600px) scale(1.5) rotate(45deg); opacity: 0; }
+        }
+
+        /* Search Bar */
+        .search-container {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            z-index: 10;
+        }
+
+        #search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid rgba(183, 110, 121, 0.4);
+            outline: none;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .search-btn {
+            background: var(--rose-gold);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Glass Player Card */
+        .app-card {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            border-radius: 35px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 50%; /* Image_478d03 vibe */
+            overflow: hidden;
+            margin: 0 auto;
+            border: 6px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        #song-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+
+        /* Rotation Animation */
+        .playing #song-img {
+            animation: rotateImg 12s linear infinite;
+        }
+
+        @keyframes rotateImg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .change-img-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: var(--heart-pink);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .song-info { margin-top: 25px; }
+        .song-name { font-size: 1.6rem; color: var(--wine); font-weight: 600; }
+        .artist-name { color: var(--rose-gold); font-size: 0.9rem; margin-top: 5px; }
+        .quote { font-family: 'Dancing Script', cursive; color: var(--heart-pink); margin-top: 15px; font-size: 1.4rem; }
+
+        /* Custom Play Button */
+        .controls { margin-top: 30px; }
+        .play-btn {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--heart-pink);
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 79, 154, 0.3);
+            transition: 0.3s;
+        }
+
+        .play-btn:active { transform: scale(0.9); }
+
+        .footer { margin-top: 20px; font-size: 12px; color: var(--wine); opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Type song name for Mikku...">
+        <button class="search-btn" onclick="searchSong()"><i class="fa fa-search"></i></button>
+    </div>
+
+    <div class="app-card" id="main-card">
+        <div class="image-wrapper">
+            <img id="song-img" src="https://via.placeholder.com/400?text=Upload+Mikku's+Pic" alt="Mikku">
+            <label for="img-upload" class="change-img-btn"><i class="fa fa-camera"></i></label>
+            <input type="file" id="img-upload" hidden accept="image/*" onchange="previewImg(event)">
+        </div>
+
+        <div class="song-info">
+            <div class="song-name" id="display-name">Mikku's Choice</div>
+            <div class="artist-name" id="display-artist">Searching for love...</div>
+            <div class="quote">“Every melody reminds me of you 🫶”</div>
+        </div>
+
+        <div class="controls">
+            <button class="play-btn" onclick="togglePlay()">
+                <i id="ctrl-icon" class="fa fa-play"></i>
+            </button>
+        </div>
+
+        <div class="footer">Made for Mikku with ❤️</div>
+    </div>
+
+    <audio id="audio-element"></audio>
+
+    <script>
+        const audio = document.getElementById('audio-element');
+        const ctrlIcon = document.getElementById('ctrl-icon');
+        const card = document.getElementById('main-card');
+
+        // --- 1. HEART POPUP LOGIC ---
+        function createHeart() {
+            const heart = document.createElement("i");
+            heart.className = "fa-solid fa-heart heart";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (Math.random() * 2 + 2) + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        }
+
+        // Jab gaana chalega tabhi hearts aayenge
+        setInterval(() => {
+            if (!audio.paused) createHeart();
+        }, 400);
+
+        // --- 2. SEARCH SONG LOGIC (iTunes API) ---
+        async function searchSong() {
+            const query = document.getElementById('search-input').value;
+            if(!query) return;
+
+            try {
+                const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&limit=1&entity=song`);
+                const data = await response.json();
+
+                if(data.results.length > 0) {
+                    const track = data.results[0];
+                    audio.src = track.previewUrl;
+                    document.getElementById('display-name').innerText = track.trackName;
+                    document.getElementById('display-artist').innerText = track.artistName;
+                    
+                    audio.play();
+                    ctrlIcon.classList.replace('fa-play', 'fa-pause');
+                    card.classList.add('playing');
+                } else {
+                    alert("Gaana nahi mila bhai! Kuch aur try karo.");
+                }
+            } catch (err) {
+                alert("Internet check karo bhai!");
+            }
+        }
+
+        // --- 3. CUSTOM PHOTO UPLOAD ---
+        function previewImg(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('song-img');
+                output.src = reader.result;
+                // Save photo to local storage so it stays there
+                localStorage.setItem('mikku_last_img', reader.result);
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // Load saved photo on start
+        window.onload = () => {
+            const savedImg = localStorage.getItem('mikku_last_img');
+            if(savedImg) document.getElementById('song-img').src = savedImg;
+        }
+
+        // --- 4. PLAY/PAUSE ---
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                ctrlIcon.classList.replace('fa-play', 'fa-pause');
+                card.classList.add('playing');
+            } else {
+                audio.pause();
+                ctrlIcon.classList.replace('fa-pause', 'fa-play');
+                card.classList.remove('playing');
+            }
+        }
+
+        // Auto change icon when song ends
+        audio.onended = () => {
+            ctrlIcon.classList.replace('fa-pause', 'fa-play');
+            card.classList.remove('playing');
+        };
+    </script>
+</body>
+</html>
